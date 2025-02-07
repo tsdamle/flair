@@ -28,7 +28,11 @@ READS_MANIFEST = $I/reads_manifest.txt
 COUNTS_MATRIX = $I/counts_matrix_diffexp.tsv
 DIFFSPLICE_MATRIX = $I/counts_matrix_diffsplice.tsv
 GENOME_FA = ${IT}/genome.fa
+CHR22_GENOME_FA = $(I)/chr22.fa
 
+SIM_READS = $(I)/sample1.badread5X.fastq $(I)/sample1.badread10X.fastq $(I)/sample1.badread20X.fastq $(I)/sample1.badread40X.fastq $(I)/sample2.badread5X.fastq $(I)/sample2.badread10X.fastq $(I)/sample2.badread20X.fastq $(I)/sample2.badread40X.fastq $(I)/sample3.badread5X.fastq $(I)/sample3.badread10X.fastq $(I)/sample3.badread20X.fastq $(I)/sample3.badread40X.fastq
+SIM_ANNOT = $I/gencode.v38.annotation.chr22.gtf
+SIM_TRUTH = $E/simchr22.100genes.2transcripts.2snvorindel-sample1.bed
 default:
 	@echo To run all tests, use: >&2
 	@echo "   " make test >&2
@@ -50,6 +54,23 @@ main-tests: test-main-help
 test-main-help: mkdirs
 	flair --help >& $O/$@.out
 	diff $E/$@.out $O/$@.out
+
+###
+# Simulated data tests
+###
+test-sim : mkdirs $(CHR22_GENOME_FA)
+	for READ in $(SIM_READS); do \
+		BASENAME=$$(basename $$READ .fastq); \
+		OUTDIR=$O/$$BASENAME; \
+		mkdir -p $$OUTDIR; \
+		flair align -r $$READ --genome $(CHR22_GENOME_FA) -t 4 -o $$OUTDIR/align; \
+		flair correct -q $$OUTDIR/align.bed -f $(SIM_ANNOT) -g $(CHR22_GENOME_FA) -o $$OUTDIR/corrected; \
+		flair collapse -r $$READ --support 2 -q $$OUTDIR/corrected_all_corrected.bed -g $(CHR22_GENOME_FA) -t 4 --generate_map --temp_dir $$OUTDIR/tmp --keep_intermediate -f $(SIM_ANNOT) -o $$OUTDIR/collapsed --annotation_reliant generate --stringent --check_splice --isoformtss; \
+	done
+##		
+##		flair collapse -r $$READS --support 2 -q $O/$$BASENAME"_all_corrected.bed" -g $(SIM_GENOME_FA) -t 4 --generate_map --temp_dir $O/$@.tmp --keep_intermediate -f $(SIM_ANNOT) -o $O/$$BASENAME --annotation_reliant generate --stringent --check_splice --isoformtss; \
+##		#python compareSim.py $(SIM_TRUTH) $O/$$BASENAME.isoforms.bed; \
+
 
 ###
 # FLAIR ALIGN
@@ -219,6 +240,13 @@ ${GENOME_FA}:
 	wget -nv https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/chr20.fa.gz
 	zcat chr12.fa.gz chr17.fa.gz chr20.fa.gz > $@
 	rm chr12.fa.gz chr17.fa.gz chr20.fa.gz
+
+${CHR22_GENOME_FA}:
+	mkdir -p $(dir $@)
+	rm -f $@.fai
+	wget -nv https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/chr22.fa.gz
+	zcat chr22.fa.gz > $@
+	rm chr22.fa.gz
 
 mkdirs :
 	@mkdir -p $O $D
