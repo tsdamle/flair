@@ -1,0 +1,752 @@
+flair align --help >&output/test-align-help.out
+diff expected/test-align-help.out output/test-align-help.out
+13,16c13,16
+<                         annotated isoforms/junctions bed file for splice
+<                         site-guided minimap2 genomic alignment
+<   --nvrna               specify this flag to use native-RNA specific
+<                         alignment parameters for minimap2
+---
+>                         annotated isoforms/junctions bed file for splice site-
+>                         guided minimap2 genomic alignment
+>   --nvrna               specify this flag to use native-RNA specific alignment
+>                         parameters for minimap2
+20,21c20
+<                         More important when doing downstream fusion
+<                         detection
+---
+>                         More important when doing downstream fusion detection
+23,25c22,23
+<                         maximum intron length in genomic alignment. Longer
+<                         can help recover more novel isoforms with long
+<                         introns
+---
+>                         maximum intron length in genomic alignment. Longer can
+>                         help recover more novel isoforms with long introns
+28,32c26,29
+<                         fusion reads). Options: removesup (default),
+<                         separate (required for downstream work with
+<                         fusions), keepsup (keeps supplementary alignments
+<                         for isoform detection, does not allow gene fusion
+<                         detection)
+---
+>                         fusion reads). Options: removesup (default), separate
+>                         (required for downstream work with fusions), keepsup
+>                         (keeps supplementary alignments for isoform detection,
+>                         does not allow gene fusion detection)
+36,37c33
+<                         specify if want to remove reads with internal
+<                         priming
+---
+>                         specify if want to remove reads with internal priming
+39,40c35,36
+<                         --remove_internal_priming is specified, recommended
+<                         if so
+---
+>                         --remove_internal_priming is specified, recommended if
+>                         so
+make: *** [Makefile:89: test-align-help] Error 1
+flair correct --help >&output/test-correct-help.out
+diff expected/test-correct-help.out output/test-correct-help.out
+25,26c25
+<                         bed format splice junctions from short-read
+<                         sequencing
+---
+>                         bed format splice junctions from short-read sequencing
+make: *** [Makefile:103: test-correct-help] Error 1
+flair --help >& output/test-main-help.out
+diff expected/test-main-help.out output/test-main-help.out
+flair correct -q input/test.align.bed -j input/shortread_junctions.tab -f input/annotation.incomplete.gtf -g input.tmp/genome.fa -o output/test-correct
+Starting correct...
+Flair correct took 0 minutes and 17 seconds
+
+Flair took 0 minutes and 17 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+diff <(sort expected/test-correct_all_inconsistent.bed) <(sort output/test-correct_all_inconsistent.bed) > diffs/test-correct.inconsistent.diff
+diff <(sort expected/test-correct_all_corrected.bed) <(sort output/test-correct_all_corrected.bed) > diffs/test-correct.corrected.diff
+flair collapse --help >&output/test-collapse-help.out
+diff expected/test-collapse-help.out output/test-collapse-help.out
+14,18c14,17
+<   -f GTF, --gtf GTF     GTF annotation file, used for renaming FLAIR
+<                         isoforms to annotated isoforms and adjusting
+<                         TSS/TESs
+<   --generate_map        specify this argument to generate a txt file of
+<                         read-isoform assignments (default: not specified)
+---
+>   -f GTF, --gtf GTF     GTF annotation file, used for renaming FLAIR isoforms
+>                         to annotated isoforms and adjusting TSS/TESs
+>   --generate_map        specify this argument to generate a txt file of read-
+>                         isoform assignments (default: not specified)
+26,27c25,26
+<                         minimum number of supporting reads for an isoform;
+<                         if s < 1, it will be treated as a percentage of
+---
+>                         minimum number of supporting reads for an isoform; if
+>                         s < 1, it will be treated as a percentage of
+29,36c28,35
+<   --stringent           specify if all supporting reads need to be full-
+<                         length (80% coverage and spanning 25 bp of the
+<                         first and last exons)
+<   --check_splice        enforce coverage of 4 out of 6 bp around each
+<                         splice site and no insertions greater than 3 bp at
+<                         the splice site
+<   --trust_ends          specify if reads are generated from a long read
+<                         method with minimal fragmentation
+---
+>   --stringent           specify if all supporting reads need to be full-length
+>                         (80% coverage and spanning 25 bp of the first and last
+>                         exons)
+>   --check_splice        enforce coverage of 4 out of 6 bp around each splice
+>                         site and no insertions greater than 3 bp at the splice
+>                         site
+>   --trust_ends          specify if reads are generated from a long read method
+>                         with minimal fragmentation
+39,40c38,39
+<                         bam from longshot containing haplotype information
+<                         for each read
+---
+>                         bam from longshot containing haplotype information for
+>                         each read
+51,56c50,54
+<                         For each unique splice junction chain, report
+<                         options include: none--best TSSs/TESs chosen for
+<                         each unique set of splice junctions; longest--
+<                         single TSS/TES chosen to maximize length; best_only
+<                         --single most supported TSS/TES used in conjunction
+<                         chosen (none)
+---
+>                         For each unique splice junction chain, report options
+>                         include: none--best TSSs/TESs chosen for each unique
+>                         set of splice junctions; longest--single TSS/TES
+>                         chosen to maximize length; best_only--single most
+>                         supported TSS/TES used in conjunction chosen (none)
+62,65c60,62
+<                         when specified, TSS/TES from the gtf provided with
+<                         -f will not be used to adjust isoform TSSs/TESs
+<                         each isoform will be determined from supporting
+<                         reads
+---
+>                         when specified, TSS/TES from the gtf provided with -f
+>                         will not be used to adjust isoform TSSs/TESs each
+>                         isoform will be determined from supporting reads
+69,72c66,69
+<                         default--subset isoforms are removed based on
+<                         support; comprehensive--default set + all subset
+<                         isoforms; ginormous--comprehensive set + single
+<                         exon subset isoforms
+---
+>                         default--subset isoforms are removed based on support;
+>                         comprehensive--default set + all subset isoforms;
+>                         ginormous--comprehensive set + single exon subset
+>                         isoforms
+74,77c71,73
+<                         current directory (default: python tempfile
+<                         directory)
+<   --keep_intermediate   specify if intermediate and temporary files are to
+<                         be kept for debugging. Intermediate files include:
+---
+>                         current directory (default: python tempfile directory)
+>   --keep_intermediate   specify if intermediate and temporary files are to be
+>                         kept for debugging. Intermediate files include:
+81,82c77,78
+<                         first-pass transcripts; separate args by commas,
+<                         e.g. --mm2_args=-I8g,--MD
+---
+>                         first-pass transcripts; separate args by commas, e.g.
+>                         --mm2_args=-I8g,--MD
+90,93c86,89
+<                         chromosome:coord1-coord2 or tab-delimited; if a
+<                         range is specified, then the aligned reads bam must
+<                         be specified with -r and the query must be a
+<                         sorted, bgzip-ed bed file
+---
+>                         chromosome:coord1-coord2 or tab-delimited; if a range
+>                         is specified, then the aligned reads bam must be
+>                         specified with -r and the query must be a sorted,
+>                         bgzip-ed bed file
+95,96c91
+<                         specify if want to remove reads with internal
+<                         priming
+---
+>                         specify if want to remove reads with internal priming
+110,111c105,106
+<                         FastA/FastQ files of raw reads, can specify
+<                         multiple files
+---
+>                         FastA/FastQ files of raw reads, can specify multiple
+>                         files
+make: *** [Makefile:125: test-collapse-help] Error 1
+python3 ../src/flair/fastercollapse.py --help >&output/test-collapse-faster-help.out
+diff expected/test-collapse-faster-help.out output/test-collapse-faster-help.out
+18,22c18,21
+<   -f GTF, --gtf GTF     GTF annotation file, used for renaming FLAIR
+<                         isoforms to annotated isoforms and adjusting
+<                         TSS/TESs
+<   --generate_map        specify this argument to generate a txt file of
+<                         read-isoform assignments (default: not specified)
+---
+>   -f GTF, --gtf GTF     GTF annotation file, used for renaming FLAIR isoforms
+>                         to annotated isoforms and adjusting TSS/TESs
+>   --generate_map        specify this argument to generate a txt file of read-
+>                         isoform assignments (default: not specified)
+26,27c25,26
+<                         transcript sequences given the gtf and genome fa,
+<                         type --transcriptfasta generate
+---
+>                         transcript sequences given the gtf and genome fa, type
+>                         --transcriptfasta generate
+29,30c28,29
+<                         minimum number of supporting reads for an isoform;
+<                         if s < 1, it will be treated as a percentage of
+---
+>                         minimum number of supporting reads for an isoform; if
+>                         s < 1, it will be treated as a percentage of
+32,39c31,38
+<   --stringent           specify if all supporting reads need to be full-
+<                         length (80% coverage and spanning 25 bp of the
+<                         first and last exons)
+<   --check_splice        enforce coverage of 4 out of 6 bp around each
+<                         splice site and no insertions greater than 3 bp at
+<                         the splice site
+<   --trust_ends          specify if reads are generated from a long read
+<                         method with minimal fragmentation
+---
+>   --stringent           specify if all supporting reads need to be full-length
+>                         (80% coverage and spanning 25 bp of the first and last
+>                         exons)
+>   --check_splice        enforce coverage of 4 out of 6 bp around each splice
+>                         site and no insertions greater than 3 bp at the splice
+>                         site
+>   --trust_ends          specify if reads are generated from a long read method
+>                         with minimal fragmentation
+42,43c41,42
+<                         bam from longshot containing haplotype information
+<                         for each read
+---
+>                         bam from longshot containing haplotype information for
+>                         each read
+48,49c47
+<                         More important when doing downstream fusion
+<                         detection
+---
+>                         More important when doing downstream fusion detection
+51,53c49,50
+<                         maximum intron length in genomic alignment. Longer
+<                         can help recover more novel isoforms with long
+<                         introns
+---
+>                         maximum intron length in genomic alignment. Longer can
+>                         help recover more novel isoforms with long introns
+56,62c53,58
+<                         fusion reads). Options: removesup (default),
+<                         separate (required for downstream work with
+<                         fusions), keepsup (keeps supplementary alignments
+<                         for isoform detection, does not allow gene fusion
+<                         detection)
+<   --nvrna               specify this flag to use native-RNA specific
+<                         alignment parameters for minimap2
+---
+>                         fusion reads). Options: removesup (default), separate
+>                         (required for downstream work with fusions), keepsup
+>                         (keeps supplementary alignments for isoform detection,
+>                         does not allow gene fusion detection)
+>   --nvrna               specify this flag to use native-RNA specific alignment
+>                         parameters for minimap2
+64,65c60,61
+<                         annotated isoforms/junctions bed file for splice
+<                         site-guided minimap2 genomic alignment
+---
+>                         annotated isoforms/junctions bed file for splice site-
+>                         guided minimap2 genomic alignment
+74,79c70,74
+<                         For each unique splice junction chain, report
+<                         options include: none--best TSSs/TESs chosen for
+<                         each unique set of splice junctions; longest--
+<                         single TSS/TES chosen to maximize length; best_only
+<                         --single most supported TSS/TES used in conjunction
+<                         chosen (none)
+---
+>                         For each unique splice junction chain, report options
+>                         include: none--best TSSs/TESs chosen for each unique
+>                         set of splice junctions; longest--single TSS/TES
+>                         chosen to maximize length; best_only--single most
+>                         supported TSS/TES used in conjunction chosen (none)
+85,88c80,82
+<                         when specified, TSS/TES from the gtf provided with
+<                         -f will not be used to adjust isoform TSSs/TESs
+<                         each isoform will be determined from supporting
+<                         reads
+---
+>                         when specified, TSS/TES from the gtf provided with -f
+>                         will not be used to adjust isoform TSSs/TESs each
+>                         isoform will be determined from supporting reads
+92,95c86,89
+<                         default--subset isoforms are removed based on
+<                         support; comprehensive--default set + all subset
+<                         isoforms; ginormous--comprehensive set + single
+<                         exon subset isoforms
+---
+>                         default--subset isoforms are removed based on support;
+>                         comprehensive--default set + all subset isoforms;
+>                         ginormous--comprehensive set + single exon subset
+>                         isoforms
+97,98c91
+<                         bed format splice junctions from short-read
+<                         sequencing
+---
+>                         bed format splice junctions from short-read sequencing
+107,108c100,101
+<                         first-pass transcripts; separate args by commas,
+<                         e.g. --mm2_args=-I8g,--MD
+---
+>                         first-pass transcripts; separate args by commas, e.g.
+>                         --mm2_args=-I8g,--MD
+110,113c103,105
+<                         current directory (default: python tempfile
+<                         directory)
+<   --keep_intermediate   specify if intermediate and temporary files are to
+<                         be kept for debugging. Intermediate files include:
+---
+>                         current directory (default: python tempfile directory)
+>   --keep_intermediate   specify if intermediate and temporary files are to be
+>                         kept for debugging. Intermediate files include:
+117,118c109
+<                         specify if want to remove reads with internal
+<                         priming
+---
+>                         specify if want to remove reads with internal priming
+123,124c114,115
+<                         number of bases that are at least 75% As required
+<                         to call read as internal priming
+---
+>                         number of bases that are at least 75% As required to
+>                         call read as internal priming
+129,130c120,121
+<                         FastA/FastQ files of raw reads, can specify
+<                         multiple files
+---
+>                         FastA/FastQ files of raw reads, can specify multiple
+>                         files
+make: *** [Makefile:138: test-collapse-faster-help] Error 1
+flair quantify --help >&output/test-quantify-help.out
+diff expected/test-quantify-help.out output/test-quantify-help.out
+11,13c11,12
+<   --temp_dir TEMP_DIR   directory to put temporary files. use './" to
+<                         indicate current directory (default: python
+<                         tempfile directory)
+---
+>   --temp_dir TEMP_DIR   directory to put temporary files. use './" to indicate
+>                         current directory (default: python tempfile directory)
+15,17c14,15
+<   --tpm                 Convert counts matrix to transcripts per million
+<                         and output as a separate file named
+<                         <output>.tpm.tsv
+---
+>   --tpm                 Convert counts matrix to transcripts per million and
+>                         output as a separate file named <output>.tpm.tsv
+19,20c17,18
+<   --trust_ends          specify if reads are generated from a long read
+<                         method with minimal fragmentation
+---
+>   --trust_ends          specify if reads are generated from a long read method
+>                         with minimal fragmentation
+24,25c22,23
+<                         isoform .bed file, must be specified if --stringent
+<                         or check_splice is specified
+---
+>                         isoform .bed file, must be specified if --stringent or
+>                         check_splice is specified
+27,36c25,33
+<                         isoform and extend at least 25 nt into the first
+<                         and last exons. If those exons are themselves
+<                         shorter than 25 nt, the requirement becomes 'must
+<                         start within 4 nt from the start" or "must end
+<                         within 4 nt from the end"
+<   --check_splice        enforce coverage of 4 out of 6 bp around each
+<                         splice site and no insertions greater than 3 bp at
+<                         the splice site
+<   --output_bam          whether to output bam file of reads aligned to
+<                         correct isoforms
+---
+>                         isoform and extend at least 25 nt into the first and
+>                         last exons. If those exons are themselves shorter than
+>                         25 nt, the requirement becomes 'must start within 4 nt
+>                         from the start" or "must end within 4 nt from the end"
+>   --check_splice        enforce coverage of 4 out of 6 bp around each splice
+>                         site and no insertions greater than 3 bp at the splice
+>                         site
+>   --output_bam          whether to output bam file of reads aligned to correct
+>                         isoforms
+make: *** [Makefile:171: test-quantify-help] Error 1
+rm -rf output/test-collapse.tmp
+flair collapse -r input/reads.fa -q input/test.corrected.bed -g input.tmp/genome.fa -t 4 --generate_map --temp_dir output/test-collapse.tmp --keep_intermediate -f input/annotation.gtf -o output/test-collapse -p input/promoter_regions.bed
+Starting collapse...
+Filtering out reads without promoter-supported TSS
+Renaming isoforms using gtf
+Aligning reads to first-pass isoform reference
+Aligning reads to firstpass transcripts
+Counting supporting reads for firstpass transcripts
+Filtering isoforms by read coverage
+Flair collapse took 0 minutes and 13 seconds
+
+Flair took 0 minutes and 13 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+diff <(sort expected/test-collapse.isoforms.gtf) <(sort output/test-collapse.isoforms.gtf) > diffs/test-collapse.isoforms.gtf.diff
+predictProductivity -i input/test-collapse-annot.isoforms.bed -g input/annotation.gtf -f input.tmp/genome.fa -o output/test-predict-productivity --longestORF
+diff <(sort expected/test-predict-productivity.bed) <(sort output/test-predict-productivity.bed) > diffs/test-predict-productivity.diff
+diff <(sort expected/test-predict-productivity.info.tsv) <(sort output/test-predict-productivity.info.tsv) > diffs/test-predict-productivity.info.diff
+predictProductivity --help >&output/test-predict-productivity-help.out
+diff expected/test-predict-productivity-help.out output/test-predict-productivity-help.out
+rm -rf output/test-collapse-support.tmp
+flair collapse -s 0.25 -r input/reads.fa -q input/test.corrected.bed -g input.tmp/genome.fa -t 4 --generate_map --temp_dir output/test-collapse-support.tmp --keep_intermediate -f input/annotation.gtf -o output/test-collapse-support -p input/promoter_regions.bed
+Starting collapse...
+Filtering out reads without promoter-supported TSS
+Renaming isoforms using gtf
+Aligning reads to first-pass isoform reference
+Aligning reads to firstpass transcripts
+Counting supporting reads for firstpass transcripts
+Filtering isoforms by read coverage
+Flair collapse took 0 minutes and 13 seconds
+
+Flair took 0 minutes and 13 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+diff <(sort expected/test-collapse-support.isoforms.gtf) <(sort output/test-collapse-support.isoforms.gtf) > diffs/test-collapse-support.gtf.diff
+rm -rf output/test-quantify.tmp
+flair quantify -r input/reads_manifest.txt -i input/test-collapse-annot.isoforms.fa --isoform_bed input/test-collapse-annot.isoforms.bed --generate_map --temp_dir output/test-quantify.tmp --tpm --sample_id_only -o output/test-quantify --output_bam
+Starting quantify...
+Writing temporary files with prefixes similar to output/test-quantify.tmp/tmpuqnah3gt
+Step 1/3. Aligning sample A1_b0, 1/6 
+Step 1/3. Aligning sample A2_b0, 2/6 
+Step 1/3. Aligning sample A3_b0, 3/6 
+Step 1/3. Aligning sample B1_b0, 4/6 
+Step 1/3. Aligning sample B2_b0, 5/6 
+Step 1/3. Aligning sample B3_b0, 6/6 
+Step 2/3. Quantifying isoforms for sample A1_b0: 1/6 
+Step 2.5/3. Filtering bam reads for sample A1_b0: 1/6 Step 2/3. Quantifying isoforms for sample A2_b0: 2/6 
+Step 2.5/3. Filtering bam reads for sample A2_b0: 2/6 Step 2/3. Quantifying isoforms for sample A3_b0: 3/6 
+Step 2.5/3. Filtering bam reads for sample A3_b0: 3/6 Step 2/3. Quantifying isoforms for sample B1_b0: 4/6 
+Step 2.5/3. Filtering bam reads for sample B1_b0: 4/6 Step 2/3. Quantifying isoforms for sample B2_b0: 5/6 
+Step 2.5/3. Filtering bam reads for sample B2_b0: 5/6 Step 2/3. Quantifying isoforms for sample B3_b0: 6/6 
+Step 2.5/3. Filtering bam reads for sample B3_b0: 6/6 Step 3/3. Writing counts to output/test-quantify.counts.tsv 
+
+Flair quantify took 0 minutes and 9 seconds
+
+Flair took 0 minutes and 9 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+samtools view output/test-quantify.A1.A.flair.aligned.bam | cut -f 1,3 > output/test-quantify.A1.A.flair.aligned.readtotranscript.txt
+diff <(sort expected/test-quantify.tpm.tsv) <(sort output/test-quantify.tpm.tsv) > diffs/test-quantify.diff
+diff <(sort expected/test-quantify.A1.A.flair.aligned.readtotranscript.txt) <(sort output/test-quantify.A1.A.flair.aligned.readtotranscript.txt) > diffs/test-quantify.outputbam.diff
+diff_iso_usage --help >&output/test-diff-iso-usage-help.out
+diff expected/test-diff-iso-usage-help.out output/test-diff-iso-usage-help.out
+diff_iso_usage input/counts_matrix_diffexp.tsv MCF7cdnar1r3_MCF7_batch1 MCF7cdnastrandr3r2_MCF7_batch1 output/test-diff-iso-usage.tsv
+diff <(sort expected/test-diff-iso-usage.tsv) <(sort output/test-diff-iso-usage.tsv) > diffs/test-diff-iso-usage.diff
+rm -rf output/test-collapse-annot.tmo
+flair collapse -r input/reads.fa -q input/test.corrected.bed -g input.tmp/genome.fa -t 4 --generate_map --temp_dir output/test-collapse-annot.tmp --keep_intermediate -f input/annotation.gtf -o output/test-collapse-annot -p input/promoter_regions.bed --annotation_reliant generate --stringent
+Starting collapse...
+Filtering out reads without promoter-supported TSS
+Making transcript fasta using annotated gtf and genome sequence
+Aligning reads to reference transcripts
+Counting supporting reads for annotated transcripts
+Setting up unassigned reads for flair-collapse novel isoform detection
+Renaming isoforms using gtf
+Aligning reads to first-pass isoform reference
+Aligning reads to firstpass transcripts
+Counting supporting reads for firstpass transcripts
+Filtering isoforms by read coverage
+Flair collapse took 0 minutes and 30 seconds
+
+Flair took 0 minutes and 30 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+flair_diffExp -q input/counts_matrix_diffexp.tsv -o output/test-diffexp -e 1 -of
+WARNING, running DESeq2 on genes failed, please check output/test-diffexp/workdir/dge_stderr.txt for details
+WARNING, running DESeq2 on isoforms failed, please check output/test-diffexp/workdir/dge_stderr.txt for details
+WARNING, running DRIMSeq failed, please check output/test-diffexp/workdir/dge_stderr.txt for details
+diff <(sort expected/test-diffexp.genes_deseq2_MCF7_v_A549.tsv) <(sort output/test-diffexp/genes_deseq2_MCF7_v_A549.tsv) > diffs/test-diffexp.dge.diff
+sort: cannot read: output/test-diffexp/genes_deseq2_MCF7_v_A549.tsv: No such file or directory
+make: *** [Makefile:180: test-diffexp] Error 1
+flair_diffExp --help >&output/test-diffexp-help.out
+diff expected/test-diffexp-help.out output/test-diffexp-help.out
+11,12c11,12
+<   -of, --out_dir_force  Specify this argument to force overwriting of files
+<                         in an existing output directory
+---
+>   -of, --out_dir_force  Specify this argument to force overwriting of files in
+>                         an existing output directory
+16,17c16,17
+<                         Tab-delimited isoform count matrix from flair
+<                         quantify module.
+---
+>                         Tab-delimited isoform count matrix from flair quantify
+>                         module.
+make: *** [Makefile:186: test-diffexp-help] Error 1
+flair_diffSplice --help >&output/test-diffsplice-help.out
+diff expected/test-diffsplice-help.out output/test-diffsplice-help.out
+9,15c9,15
+<   --drim1 DRIM1         The minimum number of samples that have coverage
+<                         over an AS event inclusion/exclusion for DRIMSeq
+<                         testing; events with too few samples are filtered
+<                         out and not tested (6)
+<   --drim2 DRIM2         The minimum number of samples expressing the
+<                         inclusion of an AS event; events with too few
+<                         samples are filtered out and not tested (3)
+---
+>   --drim1 DRIM1         The minimum number of samples that have coverage over
+>                         an AS event inclusion/exclusion for DRIMSeq testing;
+>                         events with too few samples are filtered out and not
+>                         tested (6)
+>   --drim2 DRIM2         The minimum number of samples expressing the inclusion
+>                         of an AS event; events with too few samples are
+>                         filtered out and not tested (3)
+17,19c17,18
+<                         inclusion/exclusion for DRIMSeq testing, events
+<                         with too few samples are filtered out and not
+<                         tested (15)
+---
+>                         inclusion/exclusion for DRIMSeq testing, events with
+>                         too few samples are filtered out and not tested (15)
+23,24c22,23
+<   --batch               If specified with --test, DRIMSeq will perform
+<                         batch correction
+---
+>   --batch               If specified with --test, DRIMSeq will perform batch
+>                         correction
+26,29c25,28
+<                         Implies --test. Specify one condition corresponding
+<                         to samples in the counts_matrix to be compared
+<                         against condition2; by default, the first two
+<                         unique conditions are used
+---
+>                         Implies --test. Specify one condition corresponding to
+>                         samples in the counts_matrix to be compared against
+>                         condition2; by default, the first two unique
+>                         conditions are used
+31,35c30,33
+<                         Specify another condition corresponding to samples
+<                         in the counts_matrix to be compared against
+<                         conditionA
+<   -of, --out_dir_force  Specify this argument to force overwriting of files
+<                         in an existing output directory
+---
+>                         Specify another condition corresponding to samples in
+>                         the counts_matrix to be compared against conditionA
+>   -of, --out_dir_force  Specify this argument to force overwriting of files in
+>                         an existing output directory
+40,41c38,39
+<                         tab-delimited isoform count matrix from flair
+<                         quantify module
+---
+>                         tab-delimited isoform count matrix from flair quantify
+>                         module
+make: *** [Makefile:200: test-diffsplice-help] Error 1
+flair_diffSplice -i input/test-collapse-annot.isoforms.bed -q input/counts_matrix_diffsplice.tsv --test -o output/test-diffsplice -of
+DRIMSeq testing for each AS event type
+alt5 event matrix file empty, not running DRIMSeq
+ir event matrix file empty, not running DRIMSeq
+
+DRIMSeq failed on es event
+Check output/test-diffsplice/workdir/ds.stderr.txt for details.
+Command was:
+runDS.py --threads 4 --outDir output/test-diffsplice --drim1 6 --drim2 3 --drim3 15 --drim4 5 --matrix output/test-diffsplice/diffsplice.es.events.quant.tsv --prefix es
+
+DRIMSeq failed on alt3 event
+Check output/test-diffsplice/workdir/ds.stderr.txt for details.
+Command was:
+runDS.py --threads 4 --outDir output/test-diffsplice --drim1 6 --drim2 3 --drim3 15 --drim4 5 --matrix output/test-diffsplice/diffsplice.alt3.events.quant.tsv --prefix alt3
+diff <(sort output/test-diffsplice/drimseq_alt3_A_v_B.tsv) <(sort expected/test-diffsplice.drimseq_alt3_A_v_B.tsv) > diffs/test-diffsplice.alt3.diff
+sort: cannot read: output/test-diffsplice/drimseq_alt3_A_v_B.tsv: No such file or directory
+make: *** [Makefile:195: test-diffsplice] Error 1
+flair align -r input/reads.fa --genome input.tmp/genome.fa -t 4 -o output/test-align-intpriming --remove_internal_priming -f input/annotation.gtf --remove_singleexon
+Starting align...
+Flair align took 1 minutes and 2 seconds
+
+Flair took 1 minutes and 2 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+diff <(sort expected/test-align-intpriming.bed) <(sort output/test-align-intpriming.bed) > diffs/test-align-intpriming.diff
+flair align -r input/reads.fa --genome input.tmp/genome.fa -t 4 -o output/test-align
+Starting align...
+Flair align took 1 minutes and 3 seconds
+
+Flair took 1 minutes and 3 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+diff <(sort expected/test-align.bed) <(sort output/test-align.bed) > diffs/test-align.diff
+rm -rf output/test-collapse-faster-annot-removeintprim.tmp
+python3 ../src/flair/fastercollapse.py -r input/reads.fa --transcriptfasta generate --stringent -g input.tmp/genome.fa -t 4 --generate_map --temp_dir output/test-collapse-faster-annot-removeintprim.tmp --keep_intermediate -f input/annotation.gtf -o output/test-collapse-faster-annot-removeintprim -p input/promoter_regions.bed --remove_internal_priming
+Making transcript fasta using annotated gtf and genome sequence
+Aligning and counting supporting reads for transcripts
+Setting up unassigned reads for novel isoform detection
+Aligning to genome
+Filtering out reads without support in input/promoter_regions.bed
+Correcting splice sites
+minimap2 -a -t 4 -N 4 --MD output/test-collapse-faster-annot-removeintprim.annotated_transcripts.fa input/reads.fa
+count_sam_transcripts.py --sam - -o output/test-collapse-faster-annot-removeintprim.annotated_transcripts.alignment.counts -t 4 --quality 1 -w 100 --generate_map output/test-collapse-faster-annot-removeintprim.annotated_transcripts.isoform.read.map.txt --stringent -i output/test-collapse-faster-annot-removeintprim.annotated_transcripts.bed --remove_internal_priming --intprimingthreshold 12 --intprimingfracAs 0.6 --transcriptomefasta output/test-collapse-faster-annot-removeintprim.annotated_transcripts.fa
+Collapsing reads into firstpass isoforms
+Renaming isoforms using gtf
+Aligning reads to first-pass isoform reference
+Aligning and counting supporting reads for transcripts
+Generating final transcriptome fasta and gtf
+minimap2 -a -t 4 -N 4 --MD output/test-collapse-faster-annot-removeintprim.firstpass.fa output/test-collapse-faster-annot-removeintprim.unassigned.fasta
+count_sam_transcripts.py --sam - -o output/test-collapse-faster-annot-removeintprim.firstpass.q.counts -t 4 --quality 1 -w 100 --generate_map output/test-collapse-faster-annot-removeintprim.novel.isoform.read.map.txt --stringent -i output/test-collapse-faster-annot-removeintprim.firstpass.bed --remove_internal_priming --intprimingthreshold 12 --intprimingfracAs 0.6 --transcriptomefasta output/test-collapse-faster-annot-removeintprim.firstpass.fa
+diff <(sort expected/test-collapse-faster-annot-removeintprim.isoforms.gtf) <(sort output/test-collapse-faster-annot-removeintprim.isoforms.gtf) > diffs/test-collapse-faster-annot-removeintprim.isoforms.gtf.diff
+mkdir -p output/test-sim-sample1.badread5X
+flair align -r input/sample1.badread5X.fastq --genome input/chr22.fa -t 4 -o output/test-sim-sample1.badread5X/align
+Starting align...
+Flair align took 0 minutes and 12 seconds
+
+Flair took 0 minutes and 12 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+flair correct -q output/test-sim-sample1.badread5X/align.bed -f input/gencode.v38.annotation.chr22.gtf -g input/chr22.fa -o output/test-sim-sample1.badread5X/corrected
+Starting correct...
+Flair correct took 0 minutes and 1 seconds
+
+Flair took 0 minutes and 1 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+flair collapse -r input/sample1.badread5X.fastq --support 2 -q output/test-sim-sample1.badread5X/corrected_all_corrected.bed -g input/chr22.fa -t 4 --generate_map --temp_dir output/test-sim-sample1.badread5X/tmp --keep_intermediate -f input/gencode.v38.annotation.chr22.gtf -o output/test-sim-sample1.badread5X/collapsed --annotation_reliant generate --stringent --check_splice --isoformtss
+Starting collapse...
+Making transcript fasta using annotated gtf and genome sequence
+Aligning reads to reference transcripts
+Counting supporting reads for annotated transcripts
+Setting up unassigned reads for flair-collapse novel isoform detection
+Renaming isoforms using gtf
+Aligning reads to first-pass isoform reference
+Aligning reads to firstpass transcripts
+Counting supporting reads for firstpass transcripts
+Filtering isoforms by read coverage
+Flair collapse took 0 minutes and 10 seconds
+
+Flair took 0 minutes and 10 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+rm -rf output/test-collapse-faster.tmp
+python3 ../src/flair/fastercollapse.py -r input/reads.fa -g input.tmp/genome.fa -t 4 --generate_map --temp_dir output/test-collapse-faster.tmp --keep_intermediate -f input/annotation.gtf -o output/test-collapse-faster -p input/promoter_regions.bed
+Aligning to genome
+Filtering out reads without support in input/promoter_regions.bed
+Correcting splice sites
+Collapsing reads into firstpass isoforms
+Renaming isoforms using gtf
+Aligning reads to first-pass isoform reference
+Aligning and counting supporting reads for transcripts
+Generating final transcriptome fasta and gtf
+minimap2 -a -t 4 -N 4 --MD output/test-collapse-faster.firstpass.fa input/reads.fa
+count_sam_transcripts.py --sam - -o output/test-collapse-faster.firstpass.q.counts -t 4 --quality 1 -w 100 --generate_map output/test-collapse-faster.novel.isoform.read.map.txt
+diff <(sort expected/test-collapse-faster.isoforms.gtf) <(sort output/test-collapse-faster.isoforms.gtf) > diffs/test-collapse-faster.isoforms.gtf.diff
+mkdir -p output/test-sim-sample3.badread5X
+flair align -r input/sample3.badread5X.fastq --genome input/chr22.fa -t 4 -o output/test-sim-sample3.badread5X/align
+Starting align...
+Flair align took 0 minutes and 11 seconds
+
+Flair took 0 minutes and 11 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+flair correct -q output/test-sim-sample3.badread5X/align.bed -f input/gencode.v38.annotation.chr22.gtf -g input/chr22.fa -o output/test-sim-sample3.badread5X/corrected
+Starting correct...
+Flair correct took 0 minutes and 1 seconds
+
+Flair took 0 minutes and 1 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+flair collapse -r input/sample3.badread5X.fastq --support 2 -q output/test-sim-sample3.badread5X/corrected_all_corrected.bed -g input/chr22.fa -t 4 --generate_map --temp_dir output/test-sim-sample3.badread5X/tmp --keep_intermediate -f input/gencode.v38.annotation.chr22.gtf -o output/test-sim-sample3.badread5X/collapsed --annotation_reliant generate --stringent --check_splice --isoformtss
+Starting collapse...
+Making transcript fasta using annotated gtf and genome sequence
+Aligning reads to reference transcripts
+Counting supporting reads for annotated transcripts
+Setting up unassigned reads for flair-collapse novel isoform detection
+Renaming isoforms using gtf
+Aligning reads to first-pass isoform reference
+Aligning reads to firstpass transcripts
+Counting supporting reads for firstpass transcripts
+Filtering isoforms by read coverage
+Flair collapse took 0 minutes and 8 seconds
+
+Flair took 0 minutes and 8 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+rm -rf output/test-collapse-faster-annot.tmo
+python3 ../src/flair/fastercollapse.py -r input/reads.fa --transcriptfasta generate --stringent -g input.tmp/genome.fa -t 4 --generate_map --temp_dir output/test-collapse-faster-annot.tmp --keep_intermediate -f input/annotation.gtf -o output/test-collapse-faster-annot -p input/promoter_regions.bed
+Making transcript fasta using annotated gtf and genome sequence
+Aligning and counting supporting reads for transcripts
+Setting up unassigned reads for novel isoform detection
+Aligning to genome
+Filtering out reads without support in input/promoter_regions.bed
+Correcting splice sites
+minimap2 -a -t 4 -N 4 --MD output/test-collapse-faster-annot.annotated_transcripts.fa input/reads.fa
+count_sam_transcripts.py --sam - -o output/test-collapse-faster-annot.annotated_transcripts.alignment.counts -t 4 --quality 1 -w 100 --generate_map output/test-collapse-faster-annot.annotated_transcripts.isoform.read.map.txt --stringent -i output/test-collapse-faster-annot.annotated_transcripts.bed
+Collapsing reads into firstpass isoforms
+Renaming isoforms using gtf
+Aligning reads to first-pass isoform reference
+Aligning and counting supporting reads for transcripts
+Generating final transcriptome fasta and gtf
+minimap2 -a -t 4 -N 4 --MD output/test-collapse-faster-annot.firstpass.fa output/test-collapse-faster-annot.unassigned.fasta
+count_sam_transcripts.py --sam - -o output/test-collapse-faster-annot.firstpass.q.counts -t 4 --quality 1 -w 100 --generate_map output/test-collapse-faster-annot.novel.isoform.read.map.txt --stringent -i output/test-collapse-faster-annot.firstpass.bed
+diff <(sort expected/test-collapse-faster-annot.isoforms.gtf) <(sort output/test-collapse-faster-annot.isoforms.gtf) > diffs/test-collapse-faster-annot.isoforms.gtf.diff
+mkdir -p output/test-sim-sample2.badread5X
+flair align -r input/sample2.badread5X.fastq --genome input/chr22.fa -t 4 -o output/test-sim-sample2.badread5X/align
+Starting align...
+Flair align took 0 minutes and 16 seconds
+
+Flair took 0 minutes and 16 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+flair correct -q output/test-sim-sample2.badread5X/align.bed -f input/gencode.v38.annotation.chr22.gtf -g input/chr22.fa -o output/test-sim-sample2.badread5X/corrected
+Starting correct...
+Flair correct took 0 minutes and 1 seconds
+
+Flair took 0 minutes and 1 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+flair collapse -r input/sample2.badread5X.fastq --support 2 -q output/test-sim-sample2.badread5X/corrected_all_corrected.bed -g input/chr22.fa -t 4 --generate_map --temp_dir output/test-sim-sample2.badread5X/tmp --keep_intermediate -f input/gencode.v38.annotation.chr22.gtf -o output/test-sim-sample2.badread5X/collapsed --annotation_reliant generate --stringent --check_splice --isoformtss
+Starting collapse...
+Making transcript fasta using annotated gtf and genome sequence
+Aligning reads to reference transcripts
+Counting supporting reads for annotated transcripts
+Setting up unassigned reads for flair-collapse novel isoform detection
+Renaming isoforms using gtf
+Aligning reads to first-pass isoform reference
+Aligning reads to firstpass transcripts
+Counting supporting reads for firstpass transcripts
+Filtering isoforms by read coverage
+Flair collapse took 0 minutes and 11 seconds
+
+Flair took 0 minutes and 11 seconds and finished without issues.
+
+FLAIR HAS FINISHED
+
+
+make: Target 'test' not remade because of errors.
