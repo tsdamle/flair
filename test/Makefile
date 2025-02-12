@@ -30,7 +30,7 @@ DIFFSPLICE_MATRIX = $I/counts_matrix_diffsplice.tsv
 GENOME_FA = ${IT}/genome.fa
 CHR22_GENOME_FA = $(I)/chr22.fa
 
-SIM_NAMES = sample1.badread5X sample2.badread5X sample3.badread5X
+SIM_NAMES = sample1.badread5X sample2.badread5X sample3.badread5X sample1.nanopore5X sample2.nanopore5X sample3.nanopore5X
 SIM_READS = ${SIM_NAMES:%=$I/%.fastq} 
 SIM_ANNOT = $I/gencode.v38.annotation.chr22.gtf
 SIM_TRUTH = $E/simchr22.100genes.2transcripts.2snvorindel-sample1.bed
