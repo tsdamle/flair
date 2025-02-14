@@ -33,7 +33,15 @@ CHR22_GENOME_FA = $(I)/chr22.fa
 SIM_NAMES = sample1.badread5X sample2.badread5X sample3.badread5X sample1.nanopore5X sample2.nanopore5X sample3.nanopore5X
 SIM_READS = ${SIM_NAMES:%=$I/%.fastq} 
 SIM_ANNOT = $I/gencode.v38.annotation.chr22.gtf
-SIM_TRUTH = $E/simchr22.100genes.2transcripts.2snvorindel-sample1.bed
+SIM_TRUTH_BED_PATTERN = $E/%.bed
+SIM_TRUTH_VCF_PATTERN = $E/%.vcf
+PYTHON_SCRIPT = $I/generate_tsv.py
+COMPARISON_TSV = $O/comparison.tsv
+SAMPLE_ID = sample1 sample2 sample3
+SIM_TRUTH_BED = $(foreach id, $(SAMPLE_ID), $(E)/$(id).bed)
+SIM_TRUTH_VCF = $(foreach id, $(SAMPLE_ID), $(E)/$(id).vcf)
+
+
 default:
 	@echo To run all tests, use: >&2
 	@echo "   " make test >&2
@@ -60,17 +68,28 @@ test-main-help: mkdirs
 ###
 # Simulated data tests
 ###
+$(info SIM_TRUTH_BED contains: $(SIM_TRUTH_BED))
+$(info SIM_TRUTH_VCF contains: $(SIM_TRUTH_VCF))
+
 sim-tests: ${SIM_NAMES:%=test-sim-%}
 test-sim-% : mkdirs $(CHR22_GENOME_FA)
 	mkdir -p $O/$@
-	flair align -r $I/$*.fastq --genome $(CHR22_GENOME_FA) -t 4 -o $O/$@/align
-	flair correct -q $O/$@/align.bed -f $(SIM_ANNOT) -g $(CHR22_GENOME_FA) -o $O/$@/corrected
-	flair collapse -r $I/$*.fastq --support 2 -q $O/$@/corrected_all_corrected.bed -g $(CHR22_GENOME_FA) -t 4 --generate_map --temp_dir $O/$@/tmp --keep_intermediate -f $(SIM_ANNOT) -o $O/$@/collapsed --annotation_reliant generate --stringent --check_splice --isoformtss
-##		flair collapse -r $$READS --support 2 -q $O/$$BASENAME"_all_corrected.bed" -g $(SIM_GENOME_FA) -t 4 --generate_map --temp_dir $O/$@.tmp --keep_intermediate -f $(SIM_ANNOT) -o $O/$$BASENAME --annotation_reliant generate --stringent --check_splice --isoformtss; \
-##		#python compareSim.py $(SIM_TRUTH) $O/$$BASENAME.isoforms.bed; \
+#	flair align -r $I/$*.fastq --genome $(CHR22_GENOME_FA) -t 4 -o $O/$@/align
+#	flair correct -q $O/$@/align.bed -f $(SIM_ANNOT) -g $(CHR22_GENOME_FA) -o $O/$@/corrected
+#	flair collapse -r $I/$*.fastq --support 2 -q $O/$@/corrected_all_corrected.bed -g $(CHR22_GENOME_FA) -t 4 --generate_map --temp_dir $O/$@/tmp --keep_intermediate -f $(SIM_ANNOT) -o $O/$@/collapsed --annotation_reliant generate --stringent --check_splice --isoformtss
 
+	BED_FILE := $(E)/$(SAMPLE_ID).bed
+	VCF_FILE := $(E)/$(SAMPLE_ID).vcf
 
-###
+	$(info BED_FILE: $(BED_FILE))
+	$(info VCF_FILE: $(VCF_FILE))
+
+	@if [ -f "$(BED_FILE)" ] && [ -f "$(VCF_FILE)" ]; then \
+		python3 $(PYTHON_SCRIPT) $O/$@ $(BED_FILE) $(VCF_FILE) $(COMPARISON_TSV); \
+	else \
+		echo "Error: Missing ground truth files for $(SAMPLE_ID)" >&2; \
+		exit 1; \
+	fi
 # FLAIR ALIGN
 ###
 
