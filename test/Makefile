@@ -37,9 +37,9 @@ SIM_TRUTH_BED_PATTERN = $E/%.bed
 SIM_TRUTH_VCF_PATTERN = $E/%.vcf
 PYTHON_SCRIPT = $I/generate_tsv.py
 COMPARISON_TSV = $O/comparison.tsv
-SAMPLE_ID = sample1 sample2 sample3
-SIM_TRUTH_BED = $(foreach id, $(SAMPLE_ID), $(E)/$(id).bed)
-SIM_TRUTH_VCF = $(foreach id, $(SAMPLE_ID), $(E)/$(id).vcf)
+#SAMPLE_ID = sample1 sample2 sample3
+#SIM_TRUTH_BED = $(foreach id, $(SAMPLE_ID), $(E)/$(id).bed)
+#SIM_TRUTH_VCF = $(foreach id, $(SAMPLE_ID), $(E)/$(id).vcf)
 
 
 default:
@@ -77,6 +77,7 @@ test-sim-% : mkdirs $(CHR22_GENOME_FA)
 #	flair align -r $I/$*.fastq --genome $(CHR22_GENOME_FA) -t 4 -o $O/$@/align
 #	flair correct -q $O/$@/align.bed -f $(SIM_ANNOT) -g $(CHR22_GENOME_FA) -o $O/$@/corrected
 #	flair collapse -r $I/$*.fastq --support 2 -q $O/$@/corrected_all_corrected.bed -g $(CHR22_GENOME_FA) -t 4 --generate_map --temp_dir $O/$@/tmp --keep_intermediate -f $(SIM_ANNOT) -o $O/$@/collapsed --annotation_reliant generate --stringent --check_splice --isoformtss
+	SAMPLE_ID := $(shell echo $* | cut -d'.' -f1)
 
 	BED_FILE := $(E)/$(SAMPLE_ID).bed
 	VCF_FILE := $(E)/$(SAMPLE_ID).vcf
