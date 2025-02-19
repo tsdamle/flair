@@ -1,0 +1,7 @@
+samplename	junction-chain-recall	junction-chain-precision	transcript-ends-recall	transcript-ends-precision	junction-chain-and-ends-recall	junction-chain-and-ends-precision
+test-sim-sample1.badread5X	82.50%	99.40%	84.00%	99.40%	82.50%	99.40%
+test-sim-sample2.badread5X	83.50%	99.40%	84.50%	99.40%	83.00%	99.40%
+test-sim-sample3.badread5X	87.00%	98.86%	89.00%	98.86%	87.00%	98.86%
+test-sim-sample1.nanopore5X	61.00%	97.60%	63.50%	97.60%	61.00%	97.60%
+test-sim-sample2.nanopore5X	65.00%	98.48%	68.00%	98.48%	65.00%	98.48%
+test-sim-sample3.nanopore5X	69.00%	97.87%	72.00%	97.87%	69.00%	97.87%
